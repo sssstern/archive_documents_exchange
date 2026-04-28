@@ -1,0 +1,109 @@
+.message-card-wrapper {
+  display: flex;
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+.message-card-wrapper--own {
+  justify-content: flex-end;
+}
+
+.message-card-wrapper--alien {
+  justify-content: flex-start;
+}
+
+.message-card {
+  max-width: 80%;
+  min-width: 280px;
+  background-color: var(--mui-palette-background-default) !important;
+  padding: 16px 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  position: relative;
+}
+
+.message-card--error {
+  max-width: 80%;
+  background-color: var(--mui-palette-background-default) !important;
+  padding: 16px 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  position: relative;
+  border-left: 4px solid var(--mui-palette-primary-main);
+  border-radius: 0 12px 12px 0;
+}
+
+.message-card--own {
+  border-right: 4px solid var(--mui-palette-primary-main);
+  border-radius: 12px 0 0 12px;
+}
+
+.message-card--alien {
+  border-left: 4px solid var(--mui-palette-primary-main);
+  border-radius: 0 12px 12px 0;
+}
+
+.message-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+  gap: 15px;
+}
+
+.message-card__username {
+  font-family: 'Arial Black', sans-serif;
+  font-size: 13px;
+  font-weight: 900;
+  color: var(--mui-palette-primary-main);
+  text-transform: uppercase;
+}
+
+.message-card__time {
+  font-family: sans-serif;
+  font-size: 11px;
+  color: var(--mui-palette-text-secondary);
+}
+
+.message-card__content {
+  font-family: sans-serif;
+  font-size: 14px !important;
+  color: var(--mui-palette-text-primary) !important;
+  line-height: 1.5;
+  text-align: left;
+}
+
+.message-card__image-container {
+  margin-top: 12px;
+  display: flex;
+  justify-content: center;
+  background-color: var(--mui-palette-background-paper);
+  border: 1px solid var(--mui-palette-divider);
+}
+
+.message-card__img {
+  max-width: 100%;
+  max-height: 300px;
+  object-fit: contain;
+  display: block;
+}
+
+.message-card__spinner {
+  color: var(--mui-palette-primary-main) !important;
+}
+
+.message-card__no-image {
+  padding: 20px;
+  font-size: 12px;
+  color: var(--mui-palette-text-disabled);
+}
+
+@media (max-width: 600px) {
+  .message-card {
+    max-width: 95%;
+    min-width: auto;
+    padding: 12px;
+  }
+
+  .message-card__username {
+    font-size: 11px;
+  }
+}

@@ -1,0 +1,105 @@
+/* Login.css */
+
+.login-page {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background-color: var(--mui-palette-background-default);
+}
+.login-card {
+  width: 100%;
+  margin: auto;
+  max-width: 450px;
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--mui-palette-background-default);
+}
+
+/* Новый контейнер, который распределяет пространство */
+.login-layout {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+/* Центрируем карточку входа в оставшемся пространстве */
+
+/* Убеждаемся, что хедер не сжимается */
+.global-header {
+  flex-shrink: 0;
+}
+
+.login-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .login-card {
+    width: 100%;
+    max-width: 450px;
+    padding: 40px 20px;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--mui-palette-background-default);
+  }
+  .login-header {
+    color: var(--mui-palette-primary-main);
+    font-family: 'Arial Black', sans-serif;
+    font-size: 48px;
+    font-weight: 900;
+    margin-bottom: 25px;
+    letter-spacing: -2px;
+  }
+
+  .field-wrapper {
+    margin-bottom: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .field-label {
+    font-family: sans-serif;
+    font-size: 16px;
+    color: var(--mui-palette-text-primary);
+    margin-bottom: 8px;
+  }
+  .login-input .MuiOutlinedInput-root {
+    border-radius: 25px !important;
+    background-color: var(--mui-palette-background-paper);
+    color: var(--mui-palette-text-primary);
+  }
+  .login-input .MuiOutlinedInput-notchedOutline {
+    border: 2px solid #D5D5D5 !important;
+  }
+  
+  .login-input .MuiInputBase-input {
+    padding: 14px 24px !important;
+  }
+  
+  .login-button {
+    margin-top: 20px !important;
+    border-radius: 50px !important;
+    height: 50px;
+    font-weight: 900 !important;
+    box-shadow: none !important;
+    background-color: #FF1919 !important;
+  }
+  
+  .login-button:hover {
+    background-color: #d11515 !important;
+  }
+
+  @media (max-width: 480px) {
+    .login-header {
+      font-size: 36px;
+    }
+  }

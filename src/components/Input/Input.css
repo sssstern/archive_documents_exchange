@@ -1,0 +1,79 @@
+.chat-input-container {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--mui-palette-background-default);
+  padding: 20px;
+  flex-shrink: 0;
+  width: 100%;
+}
+
+.chat-input-controls {
+  display: flex;
+  justify-content: flex-end; 
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.chat-input-field {
+  width: 180px !important;
+}
+
+.chat-input-field .MuiOutlinedInput-root {
+  border-radius: 50px !important;
+  background-color: var(--mui-palette-background-paper);
+  color: var(--mui-palette-text-primary);
+}
+
+.chat-input-field .MuiOutlinedInput-notchedOutline {
+  border: 1px solid var(--mui-palette-divider) !important;
+}
+
+/* Состояния при взаимодействии (используем ваш красный) */
+.chat-input-field .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: var(--mui-palette-primary-main) !important;
+}
+
+.chat-input-field .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: var(--mui-palette-primary-main) !important;
+}
+
+.chat-input-field .MuiInputLabel-root {
+  color: var(--mui-palette-text-secondary);
+}
+
+.chat-input-field .MuiInputLabel-root.Mui-focused {
+  color: var(--mui-palette-primary-main);
+}
+
+/* Кнопка отправки */
+.chat-input-button {
+  background-color: var(--mui-palette-primary-main) !important;
+  color: #ffffff !important;
+  border-radius: 50px !important;
+  padding: 12px 30px !important;
+  font-family: 'Arial Black', sans-serif !important;
+  font-weight: 900 !important;
+  font-size: 14px !important;
+  text-transform: none !important;
+  box-shadow: none !important;
+}
+
+.chat-input-button:hover {
+  background-color: var(--mui-palette-primary-dark) !important;
+}
+
+@media (max-width: 600px) {
+  .chat-input-controls {
+    flex-direction: column; /* Кнопка под полем ввода на мобилках */
+    align-items: stretch;
+  }
+
+  .chat-input-field {
+    width: 100% !important;
+  }
+
+  .chat-input-button {
+    width: 100%;
+  }
+}

@@ -1,0 +1,20 @@
+[
+    {
+      "id": "testdoc",
+      "title": "Тестовый документ MinIO",
+      "author": "Система",
+      "pages": 3
+    },
+    {
+      "id": "alphabetum",
+      "title": "Alphabetum Romanum",
+      "author": "Felice Feliciano",
+      "pages": 10
+    },
+    {
+      "id": "bauhaus",
+      "title": "Bauhaus Catalog",
+      "author": "Herbert Bayer",
+      "pages": 5
+    }
+  ]

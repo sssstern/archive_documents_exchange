@@ -1,0 +1,94 @@
+openapi: 3.0.3
+info:
+  title: Архивный Фонд - Прикладной уровень
+  description: |
+    Взаимодействие между Прикладным и Транспортным уровнями. 
+    Метод **Send** работает через WebSocket протокол.
+    Метод **Receive** работает через HTTP POST для приема данных от транспорта.
+  version: 1.0.0
+
+paths:
+  /api/send:
+    post:
+      tags:
+        - WebSocket Methods
+      summary: "Метод Send (Клиент -> Сервер)"
+      description: "Формирует запрос на получение страницы архивного документа."
+      operationId: "apiSend"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MessageRequest'
+      responses:
+        '200':
+          description: "Запрос успешно отправлен в сокет"
+
+  /api/receive:
+    post:
+      tags:
+        - HTTP Methods
+      summary: "Метод Receive (Транспорт -> Сервер)"
+      description: "Принимает результат обработки от транспортного уровня и рассылает его клиентам."
+      operationId: "apiReceive"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MessageResponse'
+      responses:
+        '200':
+          description: "Данные приняты и транслированы в чат"
+
+components:
+  schemas:
+    MessageRequest:
+      type: object
+      required: [username, payload]
+      properties:
+        username:
+          type: string
+          example: "Ivan_64B"
+        send_time:
+          type: string
+          format: date-time
+          example: "2026-04-03T12:00:00Z"
+        payload:
+          type: object
+          properties:
+            document_id:
+              type: string
+              example: "1"
+            page_number:
+              type: integer
+              example: 5
+
+    MessageResponse:
+      type: object
+      required: [username, payload]
+      properties:
+        username:
+          type: string
+          description: "Имя отправителя или SYSTEM_MOCK"
+          example: "SYSTEM_MOCK"
+        send_time:
+          type: string
+          format: date-time
+        error:
+          type: string
+          nullable: true
+          description: "Текст ошибки, если она возникла"
+          example: "Транспортный уровень недоступен"
+        payload:
+          type: object
+          properties:
+            document_id:
+              type: string
+            page_number:
+              type: integer
+            file:
+              type: string
+              description: "Полезная нагрузка: ссылка на файл или base64"
+              example: "/docs/1_5.jpg"

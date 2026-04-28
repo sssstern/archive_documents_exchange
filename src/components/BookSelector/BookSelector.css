@@ -1,0 +1,141 @@
+.book-selector {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: var(--mui-palette-background-default);
+}
+
+.book-selector__header {
+  padding: 30px 25px 30px 25px;
+  border-bottom: 1px solid var(--mui-palette-divider);
+  flex-shrink: 0;
+}
+
+.book-selector__title {
+  font-family: 'Arial Black', sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 900 !important;
+  color: var(--mui-palette-text-primary);
+  letter-spacing: 1px !important;
+  text-transform: uppercase !important;
+}
+
+.book-selector__list {
+  display: flex; 
+  flex-direction: column; 
+  gap: 8px; 
+  flex-grow: 1; 
+  overflow-y: auto; 
+  padding: 16px;
+  min-height: 0; 
+}
+
+.book-selector__list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.book-selector__list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.book-selector__list::-webkit-scrollbar-thumb {
+  background: (--mui-palette-divider); 
+  border-radius: 0;
+}
+
+
+.book-selector__card {
+  background-color: var(--mui-palette-background-paper);
+  border: 1px solid var(--mui-palette-divider); 
+  border-radius: 25px !important; 
+  cursor: pointer;
+  flex-shrink: 0; 
+}
+
+.book-selector__card:hover {
+  border-color: var(--mui-palette-primary-main) ;
+  background-color: var(--mui-palette-action-hover) ;
+}
+
+.book-selector__card--selected {
+  border-color: var(--mui-palette-primary-main);
+  background-color: var(--mui-palette-primary-dark)
+}
+
+.book-selector__card-content {
+  padding: 12px 16px !important;
+}
+
+.book-selector__card-title {
+  font-family: 'Arial Black', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 900 !important;
+  color: var(--mui-palette-text-primary); 
+  margin-bottom: 2px !important;
+  line-height: 1.3 !important;
+  /* Убираем ellipsis, пусть переносится, если панель узкая */
+  white-space: normal !important; 
+}
+
+.book-selector__card-author {
+  font-family: sans-serif !important;
+  font-size: 11px !important;
+  color: #666 !important;
+}
+
+
+.book-selector__list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 16px; /* Базовый паддинг */
+  padding-top: 8px; /* Меньший отступ сверху, так как поиск уже там */
+  min-height: 0;
+}
+
+
+.book-selector__search-exact {
+  margin-bottom: 16px; /* Отступ от поиска до первой книги */
+}
+
+/* Стилизация самого поля ввода (Root элемент) */
+.book-selector__search-exact .MuiOutlinedInput-root {
+  background-color: var(--mui-palette-background-default); /* Белый фон внутри */
+  border-color: var(--mui-palette-divider);
+  border-radius: 100px !important; /* Очень сильное скругление как на фото */
+  font-family: sans-serif; /* Шрифт как на фото */
+  font-size: 14px;
+  color: #666; /* Цвет текста "Search" */
+  padding-left: 12px; /* Внутренние отступы */
+  height: 48px; /* Фиксированная высота для аккуратности */
+}
+
+
+/* Состояние ХОВЕР (при наведении) */
+.book-selector__search-exact:hover .MuiOutlinedInput-notchedOutline {
+  border-color: #d0d0d0 !important; /* Чуть темнее при наведении */
+}
+
+/* Состояние ФОКУС (при клике) */
+.book-selector__search-exact .Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: #FF1919 !important; /* Красный акцент при фокусе, как в вашей теме */
+  border-width: 1px !important;
+}
+
+/* Стилизация иконки и ее контейнера */
+.book-selector__search-exact .MuiInputAdornment-root {
+  margin-left: 0; /* Убираем лишний отступ */
+}
+
+/* Сама иконка ( SearchIcon ) */
+.book-selector__search-exact .MuiSvgIcon-root {
+  color: #FF1919; /* Точный красный цвет иконки */
+  font-size: 24px; /* Размер иконки */
+}
+
+/* Убираем "нотч" (вырез под лейбл), так как лейбла нет */
+.book-selector__search-exact .MuiInputLabel-root {
+  display: none;
+}
