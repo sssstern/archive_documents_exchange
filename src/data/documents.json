@@ -1,20 +1,32 @@
 [
-    {
-      "id": "testdoc",
-      "title": "Тестовый документ MinIO",
-      "author": "Система",
-      "pages": 3
-    },
-    {
-      "id": "alphabetum",
-      "title": "Alphabetum Romanum",
-      "author": "Felice Feliciano",
-      "pages": 10
-    },
-    {
-      "id": "bauhaus",
-      "title": "Bauhaus Catalog",
-      "author": "Herbert Bayer",
-      "pages": 5
-    }
-  ]
+  {
+    "id": "About Liberals and Social Democrats",
+    "title": "О либералах и социал-демократах",
+    "pages": 24
+  },
+  {
+    "id": "About the Earth",
+    "title": "О земле",
+    "pages": 8
+  },
+  {
+    "id": "About the Program of the People's Freedom Party",
+    "title": "О программе Народной партии свободы",
+    "pages": 14
+  },
+  {
+    "id": "Brief Political Program of the _Union of October 17_",
+    "title": "Краткая политическая программа «Союза 17 октября»",
+    "pages": 8
+  },
+  {
+    "id": "Congress of the Constitutional Democratic Party",
+    "title": "Съезд Конституционно-демократической партии",
+    "pages": 14
+  },
+  {
+    "id": "Program and Charter of the Society of Russian Patriots",
+    "title": "Программа и устав Общества русских патриотов",
+    "pages": 10
+  }
+]

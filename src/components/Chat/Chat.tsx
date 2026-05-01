@@ -40,7 +40,9 @@ export const Chat: React.FC<ChatProps> = ({ ws, messageArray, setMessageArray, o
           </div>
         ) : (
           <div className="chat-empty">
-            <Typography className="chat-empty__text" color="textSecondary">История сообщений пуста</Typography>
+            <Typography className="chat-empty__text">
+              История сообщений пуста
+            </Typography>
           </div>
         )}
       </div>

@@ -2,6 +2,7 @@ import React from 'react';
 import { IconButton } from '@mui/material';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
+import './ThemeToggle.css';
 
 interface Props {
   isDarkMode: boolean;
@@ -13,15 +14,6 @@ export const ThemeToggle: React.FC<Props> = ({ isDarkMode, toggleTheme }) => {
     <IconButton 
       onClick={toggleTheme}
       className="theme-toggle-btn"
-      sx={{
-        position: 'fixed',
-        bottom: 20,
-        left: 20,
-        zIndex: 2000,
-        bgcolor: 'primary.main',
-        color: 'white',
-        '&:hover': { bgcolor: 'primary.dark' }
-      }}
     >
       {isDarkMode ? <LightModeIcon /> : <DarkModeIcon />}
     </IconButton>

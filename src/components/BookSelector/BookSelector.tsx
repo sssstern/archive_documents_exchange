@@ -1,18 +1,26 @@
-// BookSelector.tsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store/store';
 import { selectBook } from '../../store/archiveSlice';
 import { Card, CardContent, Typography, TextField, InputAdornment, Box } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { ArchiveDocument } from "../../store/archiveSlice";
+import { useUser } from "../../hooks/useUser"; // Импорт для слежения за логаутом[cite: 2, 19]
 import './BookSelector.css';
 
 export const BookSelector = () => {
   const { availableBooks, selectedBookId } = useSelector((state: RootState) => state.archive);
+  const { login } = useUser(); // Получаем статус пользователя для сброса поиска[cite: 2]
   const dispatch = useDispatch();
   
   const [searchTerm, setSearchTerm] = useState('');
+
+  // Логика очистки поиска при выходе из профиля[cite: 19]
+  useEffect(() => {
+    if (!login) {
+      setSearchTerm('');
+    }
+  }, [login]);
 
   const filteredBooks = availableBooks.filter((book: ArchiveDocument) =>
     book.title.toLowerCase().includes(searchTerm.toLowerCase())
@@ -55,9 +63,6 @@ export const BookSelector = () => {
               <CardContent className="book-selector__card-content">
                 <Typography className="book-selector__card-title" title={book.title}>
                   {book.title}
-                </Typography>
-                <Typography className="book-selector__card-author" title={book.author}>
-                  {book.author}
                 </Typography>
               </CardContent>
             </Card>

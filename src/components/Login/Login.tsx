@@ -22,9 +22,8 @@ export const Login: React.FC<LoginProps> = ({ ws, setWs, createWebSocket }) => {
   };
 
   return (
-    /* Увеличиваем ширину карточки через style, чтобы не править CSS файл */
-    <div className="login-card" style={{ margin: 0, minWidth: '450px' }}> 
-      <h1 className="login-header" style={{ marginTop: 0 }}>Вход</h1>
+    <div className="login-card"> 
+      <h1 className="login-header">Вход</h1>
       <div className="field-wrapper">
         <label className="field-label">Введите имя</label>
         <TextField 
@@ -39,13 +38,11 @@ export const Login: React.FC<LoginProps> = ({ ws, setWs, createWebSocket }) => {
         />
       </div>
       
-      {/* Контейнер для выравнивания кнопки по правому краю */}
-      <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '20px' }}>
+      <div className="login-footer">
         <Button 
           variant="contained" 
           onClick={handleClickSignInBtn}
           className="login-button"
-          sx={{ minWidth: '150px' }} // Фиксированная ширина кнопки для аккуратности
         >
           Войти
         </Button>

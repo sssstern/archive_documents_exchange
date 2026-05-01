@@ -1,0 +1,27 @@
+/* ThemeToggle.css */
+.theme-toggle-btn {
+  position: fixed !important;
+  bottom: 20px !important;
+  left: 20px !important;
+  z-index: 2000;
+  background-color: var(--mui-palette-primary-main) !important;
+  color: white !important;
+  width: 45px;
+  height: 45px;
+}
+
+.theme-toggle-btn:hover {
+  background-color: var(--mui-palette-primary-dark) !important;
+}
+
+/* Мобильная версия (Справа вверху) */
+@media (max-width: 768px) {
+  .theme-toggle-btn {
+    top: 5px !important;    /* Переносим наверх */
+    right: 18px !important;  /* Смещаем вправо */
+    bottom: auto !important; /* Отменяем нижнее позиционирование */
+    left: auto !important;   /* Отменяем левое позиционирование */
+    width: 30px;             /* Компактнее на мобильных */
+    height: 30px;
+  }
+}

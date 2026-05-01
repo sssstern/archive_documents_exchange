@@ -1,12 +1,9 @@
-/* App.css */
-
 .app-wrapper {
   display: flex;
   flex-direction: column;
   height: 100vh;
   width: 100vw;
   overflow: hidden;
-  /* Используем системную переменную фона MUI */
   background-color: var(--mui-palette-background-default);
   transition: background-color 0.3s ease;
 }
@@ -14,11 +11,10 @@
 .main-content {
   flex-grow: 1;
   display: flex;
-  flex-direction: row; /* По умолчанию в ряд */
+  flex-direction: row;
   min-height: 0;
 }
 
-/* Панель каталога (Слева) */
 .catalog-sidebar {
   width: 320px;
   flex-shrink: 0;
@@ -28,7 +24,6 @@
   background-color: var(--mui-palette-background-default);
 }
 
-/* Зона чата (Справа) */
 .chat-area {
   flex-grow: 1;
   display: flex;
@@ -37,29 +32,42 @@
   background-color: var(--mui-palette-background-default);
 }
 
-/* --- АДАПТИВНОСТЬ --- */
+.login-dialog .MuiPaper-root {
+  background-color: transparent !important;
+  box-shadow: none !important;
+  margin: 16px; 
+  width: auto;
+}
 
-@media (max-width: 768px) {
+.login-dialog-container {
+  width: 100%;
+}
+
+
+@media (max-width: 600px) {
   .main-content {
-    flex-direction: column; /* На мобильных устройствах — в колонку */
+    flex-direction: column; 
+    height: 100vh;
   }
 
   .catalog-sidebar {
     width: 100%;
-    height: 35vh; /* Каталог занимает треть экрана */
+    height: 25vh;
     border-right: none;
     border-bottom: 1px solid var(--mui-palette-divider);
   }
 
   .chat-area {
     width: 100%;
-    height: 65vh;
+    height: 75vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
   }
 }
 
-/* Дополнительная фиксация для маленьких экранов (телефоны) */
 @media (max-width: 480px) {
   .catalog-sidebar {
-    height: 40vh;
+    height: 25vh;
   }
 }

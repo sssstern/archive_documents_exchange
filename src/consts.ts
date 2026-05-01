@@ -1,4 +1,8 @@
+
+//моя сеть 
 export const hostname = '172.26.72.45';
+//артем export const hostname = '10.205.157.225';
+
 
 export type ArchiveDocument = {
   id: string;

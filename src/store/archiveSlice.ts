@@ -4,7 +4,6 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 export interface ArchiveDocument {
   id: string;
   title: string;
-  author: string;
   pages: number;
 }
 
@@ -33,10 +32,14 @@ const archiveSlice = createSlice({
     // Добавляем экшен для загрузки данных из Mirage
     setDocuments: (state, action: PayloadAction<ArchiveDocument[]>) => {
         state.availableBooks = action.payload;
+    },
+    resetArchive: (state) => {
+      state.selectedBookId = null; // Сброс выбранного документа
+      state.currentPage = 1;        // Сброс страницы на дефолтную
     }
   },
 });
 
 // Проверь, что все экшены перечислены здесь
-export const { selectBook, setPage, setDocuments } = archiveSlice.actions;
+export const { selectBook, setPage, setDocuments, resetArchive} = archiveSlice.actions;
 export default archiveSlice.reducer;

@@ -13,7 +13,7 @@ import { useUser } from "./hooks/useUser";
 import { Login } from "./components/Login/Login";
 import { Message } from "./consts";
 import { Chat } from "./components/Chat/Chat";
-import { setDocuments } from "./store/archiveSlice";
+import { setDocuments, resetArchive} from "./store/archiveSlice";
 import { BookSelector } from './components/BookSelector/BookSelector';
 import { ThemeToggle } from './components/ThemeToggle/ThemeToggle';
 import staticDocuments from './data/documents.json';
@@ -44,6 +44,15 @@ function App() {
     dispatch(setDocuments(staticDocuments));
   }, [dispatch]);
 
+  useEffect(() => {
+    resetUser();
+    setMessageArray([]);
+    if (ws) ws.close();
+    setWs(null);
+    dispatch(resetArchive());
+    localStorage.removeItem('user'); 
+  }, []);
+
   const createWebSocket = (url: string) => {
     const newWs = new WebSocket(url);
     newWs.onmessage = (event) => {
@@ -64,6 +73,8 @@ function App() {
     setWs(null);
     setMessageArray([]);
     resetUser();
+    dispatch(resetArchive());
+    localStorage.removeItem('user'); 
   };
 
   const toggleTheme = () => setIsDarkMode(!isDarkMode);
@@ -72,21 +83,13 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       
-      {/* Модальное окно — теперь это только маленькая карточка по центру */}
       <Dialog 
-        open={!login} 
-        disableEscapeKeyDown
-        maxWidth={false}
-        // Убираем стандартные отступы диалога, чтобы Login управлял ими сам
-        PaperProps={{
-          sx: { 
-            borderRadius: '4px',
-            boxShadow: '0 8px 32px rgba(0,0,0,0.2)',
-            overflow: 'hidden'
-          }
-        }}
-      >
-        <Box sx={{ width: '100%' }}>
+          open={!login} 
+          fullWidth 
+          maxWidth={false}
+          className="login-dialog"
+        >
+        <Box className="login-dialog-container">
           <Login 
             ws={ws} 
             setWs={setWs} 
