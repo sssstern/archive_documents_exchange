@@ -5,113 +5,124 @@ import ws, { type WebSocket } from 'ws';
 import swaggerUi from 'swagger-ui-express';
 import YAML from 'yamljs';
 import cors from 'cors';
-const swaggerDocument = YAML.load('./swagger.yaml'); // путь к твоему файлу
 
+const swaggerDocument = YAML.load('./swagger.yaml');
 
+// Конфигурация IP и портов
+const port: number = Number(process.env.PORT ?? 8001);
+const hostname = '0.0.0.0'; // Слушаем все интерфейсы для доступа из ZeroTier
+const transportURL = process.env.TRANSPORT_URL ?? 'http://10.205.157.61:8080/process';
 
-const port: number = 8001; 
-const hostname = '0.0.0.0';
-const transportLevelPort = 8080; 
-const transportLevelHostname = 'localhost'; // Твой IP из примера
-
-interface Message {
-  username: string;
-  send_time?: string; 
-  payload: {
-    document_id?: number;
-    page_number?: number;
-    file?: string; 
-  };
-  error?: string; 
+interface IncomingPayload {
+  document_id?: string | number;
+  page_id?: number | string;
+  page_number?: number | string;
+  file?: string;
 }
 
-type Users = Record<string, Array<{ id: number; ws: WebSocket }>>;
+interface IncomingMessage {
+  username: string;
+  send_time?: string;
+  payload: IncomingPayload;
+  error?: string;
+}
 
-const app = express(); 
+const app = express();
 const server = http.createServer(app);
+
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 const wss = new ws.WebSocketServer({ server });
-const users: Users = {};
 
-// МЕТОД /api/receive (Получение от транспорта по HTTP и рассылка в WS)
-app.post('/api/receive', (req: { body: Message }, res: { sendStatus: (arg0: number) => void }) => {
-  const message: Message = req.body;
-  // Рассылаем полученный файл/ошибку всем пользователям
-  broadcast(message.username, message, true); 
-  res.sendStatus(200);
+// 1. HTTP вход с транспортного уровня — АДРЕСНАЯ РАССЫЛКА
+app.post('/api/receive', (req, res) => {
+  const message: IncomingMessage = req.body;
+  const targetUsername = message.username; 
+
+  console.log(`[receive] от транспорта для пользователя "${targetUsername}": doc=${message.payload?.document_id}, page=${message.payload?.page_id}`);
+
+  let delivered = false;
+
+  // Ищем конкретного клиента по его сохраненному имени
+  wss.clients.forEach((client: any) => {
+    if (client.readyState === ws.OPEN && client.username === targetUsername) {
+      client.send(JSON.stringify(message));
+      delivered = true;
+    }
+  });
+
+  if (delivered) {
+    res.status(200).send({ status: 'delivered' });
+  } else {
+    console.warn(`[warn] Сообщение не доставлено: пользователь "${targetUsername}" не в сети`);
+    res.status(404).send({ error: 'User not connected' });
+  }
 });
 
-// Функция рассылки (аналог sendMessageToOtherUsers)
-function broadcast(senderUsername: string, message: Message, sendToAll = false): void {
-  const msgString = JSON.stringify(message);
-  for (const key in users) {
-    // Если sendToAll = true, отправляем всем. Если false - всем, кроме отправителя.
-    if (sendToAll || key !== senderUsername) {
-      users[key].forEach(element => {
-        if (element.ws.readyState === ws.OPEN) {
-          element.ws.send(msgString);
-        }
-      });
-    }
-  }
-}
+// 2. WebSocket соединение — ИДЕНТИФИКАЦИЯ
+wss.on('connection', (websocketConnection: WebSocket, req) => {
+  const urlParams = new URLSearchParams(req.url?.split('?')[1]);
+  const username = urlParams.get('username') ?? 'Anonymous';
 
-// Запуск
-server.listen(port, hostname, () => {
-  console.log(`Прикладной уровень запущен: http://${hostname}:${port}`);
-});
+  // Сохраняем имя пользователя прямо в объект сокета для фильтрации в будущем
+  (websocketConnection as any).username = username;
 
-const agentPort = 8080; 
-const agentHostname = 'localhost';
+  console.log(`[ws] Пользователь "${username}" подключён`);
 
-wss.on('connection', (websocketConnection: WebSocket, req: any) => {
-  const url = new URL(req?.url, `http://${req.headers.host}`);
-  const username = url.searchParams.get('username');
-
-  if (username) {
-    if (username in users) {
-      users[username].push({ id: Date.now(), ws: websocketConnection });
-    } else {
-      users[username] = [{ id: Date.now(), ws: websocketConnection }];
-    }
-    console.log(`[open] Пользователь ${username} подключен`);
-  }
-
-  // МЕТОД /api/send (Обработка входящего сообщения по WebSocket)
-  websocketConnection.on('message', async (messageString: string) => {
+  websocketConnection.on('message', async (raw: ws.RawData) => {
     try {
-      const message = JSON.parse(messageString);
-      
-      // Берем данные из payload
-      const docId = message.payload.document_id;
-      // ВАЖНО: проверяем, как называется поле во фронтенде (page_number или page_id)
-      const pageNum = Number(message.payload.page_number || message.payload.page_id);
-  
-      if (isNaN(pageNum)) {
-         console.error("[error] Номер страницы не является числом!");
-         return;
+      const message = JSON.parse(raw.toString()) as IncomingMessage;
+      const docId = message.payload?.document_id;
+      const pageRaw = message.payload?.page_id ?? message.payload?.page_number;
+      const pageId = Number(pageRaw);
+
+      if (docId === undefined || docId === null || isNaN(pageId)) {
+        console.error('[error] Некорректный payload от клиента:', message.payload);
+        return;
       }
-  
-      const agentPayload = {
+
+      const transportPayload = {
         document_id: String(docId),
-        page_id: pageNum
+        page_id: pageId,
+        username: username, // Передаем имя того, кто сделал запрос
       };
-  
-      console.log(`[proxy] Отправка запроса в Go-агент:`, agentPayload);
-      await axios.post(`http://localhost:8080/process`, agentPayload);
-  
-    } catch (e) {
-      console.error('Ошибка:', e.message);
+
+      console.log(`[proxy] -> транспорт (${transportURL}) для ${username}`, transportPayload);
+      
+      // Отправляем запрос на транспортный уровень (Go)
+      await axios.post(transportURL, transportPayload, { timeout: 30000 });
+      
+    } catch (e: any) {
+      console.error(`[error] Ошибка транспорта для ${username}:`, e.message ?? e);
+      
+      // Уведомляем клиента об ошибке
+      try {
+        websocketConnection.send(JSON.stringify({
+          username: 'SYSTEM_MOCK',
+          send_time: new Date().toISOString(),
+          payload: {},
+          error: `Ошибка связи с транспортным уровнем: ${e.message ?? e}`,
+        }));
+      } catch (sendError) {
+        console.error('Не удалось отправить ошибку клиенту', sendError);
+      }
     }
   });
 
   websocketConnection.on('close', () => {
-    if (username && users[username]) {
-      delete users[username];
-      console.log(`[close] Соединение с ${username} разорвано`);
-    }
+    console.log(`[ws] Пользователь "${username}" отключился`);
   });
+});
+
+server.listen(port, hostname, () => {
+  console.log(`
+  ✅ Прикладной уровень (Proxy) запущен
+  --------------------------------------------------
+  Локальный адрес:  http://${hostname}:${port}
+  Swagger UI:       http://${hostname}:${port}/api-docs
+  Транспорт (Go):   ${transportURL}
+  --------------------------------------------------
+  `);
 });

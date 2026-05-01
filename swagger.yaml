@@ -6,23 +6,6 @@ info:
   version: 1.0.0
 
 paths:
-  /api/send:
-    post:
-      tags:
-        - WebSocket Methods
-      summary: "Метод Send (Клиент -> Сервер)"
-      description: "Формирует запрос на получение страницы архивного документа."
-      operationId: "apiSend"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/MessageRequest'
-      responses:
-        '200':
-          description: "Запрос успешно отправлен в сокет"
-
   /api/receive:
     post:
       tags:
@@ -42,27 +25,6 @@ paths:
 
 components:
   schemas:
-    MessageRequest:
-      type: object
-      required: [username, payload]
-      properties:
-        username:
-          type: string
-          example: "Anna"
-        send_time:
-          type: string
-          format: date-time
-          example: "2026-04-03T12:00:00Z"
-        payload:
-          type: object
-          properties:
-            document_id:
-              type: integer
-              example: 1
-            page_number:
-              type: integer
-              example: 2
-
     MessageResponse:
       type: object
       required: [username, payload]
@@ -83,10 +45,12 @@ components:
           type: object
           properties:
             document_id:
+              type: string
+              example: "About Liberals and Social Democrats"
+            page_id:
               type: integer
-            page_number:
-              type: integer
+              example: 2
             file:
               type: string
-              description: "Полезная нагрузка: ссылка на файл или base64"
+              description: "или base64"
               example: "/docs/1_5.jpg"

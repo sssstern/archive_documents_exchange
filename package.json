@@ -29,6 +29,7 @@
     "react-redux": "^9.1.0",
     "swagger-autogen": "^2.23.7",
     "swagger-ui-express": "^5.0.1",
+    "tsoa": "^7.0.0-alpha.0",
     "undici-types": "^7.18.2",
     "v8-compile-cache-lib": "^3.0.1",
     "ws": "^8.16.0",
@@ -36,6 +37,8 @@
     "yn": "^3.1.1"
   },
   "scripts": {
+    "start": "ts-node index.ts",
+    "build": "tsc index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
